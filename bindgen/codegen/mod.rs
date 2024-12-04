@@ -806,10 +806,19 @@ impl CodeGenerator for Var {
                 .unsafe_extern_blocks
                 .then(|| quote!(unsafe));
 
+            let var_safety =
+                ctx.options().rust_features.unsafe_extern_blocks.then(|| {
+                    if ctx.declared_safe_var(&canonical_ident.to_string()) {
+                        quote!(safe)
+                    } else {
+                        quote!(unsafe)
+                    }
+                });
+
             let tokens = quote!(
                 #safety extern "C" {
                     #(#attrs)*
-                    pub static #maybe_mut #canonical_ident: #ty;
+                    pub #var_safety static #maybe_mut #canonical_ident: #ty;
                 }
             );
 
@@ -4717,11 +4726,20 @@ impl CodeGenerator for Function {
             .unsafe_extern_blocks
             .then(|| quote!(unsafe));
 
+        let fn_safety =
+            ctx.options().rust_features.unsafe_extern_blocks.then(|| {
+                if ctx.declared_safe_function(&ident.to_string()) {
+                    quote!(safe)
+                } else {
+                    quote!(unsafe)
+                }
+            });
+
         let tokens = quote! {
             #wasm_link_attribute
             #safety extern #abi {
                 #(#attributes)*
-                pub fn #ident ( #( #args ),* ) #ret;
+                pub #fn_safety fn #ident ( #( #args ),* ) #ret;
             }
         };
 
