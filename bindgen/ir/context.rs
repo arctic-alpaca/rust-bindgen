@@ -2211,6 +2211,24 @@ If you encounter an error missing from this list, please file an issue or a PR!"
         self.options.opaque_types.matches(path[1..].join("::"))
     }
 
+    /// TODO
+    pub(crate) fn declared_safe_var(&self, var: &str) -> bool {
+        debug_assert!(
+            self.in_codegen_phase(),
+            "You're not supposed to call this yet"
+        );
+        self.options.declare_safe_vars.matches(var)
+    }
+
+    /// TODO
+    pub(crate) fn declared_safe_function(&self, function: &str) -> bool {
+        debug_assert!(
+            self.in_codegen_phase(),
+            "You're not supposed to call this yet"
+        );
+        self.options.declare_safe_functions.matches(function)
+    }
+
     /// Get the options used to configure this bindgen context.
     pub(crate) fn options(&self) -> &BindgenOptions {
         &self.options

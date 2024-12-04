@@ -674,6 +674,32 @@ options! {
         },
         as_args: "--manually-drop-union",
     },
+    /// The patterns marking variables that should be marked as `safe`.
+    declare_safe_vars: RegexSet {
+        methods: {
+            regex_option! {
+                /// TODO
+                pub fn declare_safe_var<T: AsRef<str>>(mut self, arg: T) -> Builder {
+                    self.options.declare_safe_vars.insert(arg);
+                    self
+                }
+            }
+        },
+        as_args: "--declare-safe-var",
+    },
+    /// The patterns marking functions that should be marked as `safe`.
+    declare_safe_functions: RegexSet {
+        methods: {
+            regex_option! {
+                /// TODO
+                pub fn declare_safe_function<T: AsRef<str>>(mut self, arg: T) -> Builder {
+                    self.options.declare_safe_functions.insert(arg);
+                    self
+                }
+            }
+        },
+        as_args: "--declare-safe-function",
+    },
 
 
     /// Whether we should generate built-in definitions.
